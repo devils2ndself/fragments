@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/devils2ndself/fragments/issues"
   },
-  "homepage": "https://github.com/devils2ndself/fragments#readme"
+  "homepage": "https://github.com/devils2ndself/fragments#readme",
+  "devDependencies": {
+    "prettier": "2.7.1"
+  }
 }
