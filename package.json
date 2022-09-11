@@ -1,0 +1,21 @@
+{
+  "name": "fragments",
+  "private": true,
+  "version": "0.0.1",
+  "description": "REST API microservice for managing small pieces of data",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devils2ndself/fragments.git"
+  },
+  "keywords": [],
+  "author": "Artem Tanyhin",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/devils2ndself/fragments/issues"
+  },
+  "homepage": "https://github.com/devils2ndself/fragments#readme"
+}
