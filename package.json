@@ -5,7 +5,8 @@
   "description": "REST API microservice for managing small pieces of data",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint --config .eslintrc.js src/**"
   },
   "repository": {
     "type": "git",
@@ -19,6 +20,7 @@
   },
   "homepage": "https://github.com/devils2ndself/fragments#readme",
   "devDependencies": {
+    "eslint": "^8.23.0",
     "prettier": "2.7.1"
   }
 }
