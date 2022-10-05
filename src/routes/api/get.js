@@ -1,9 +1,18 @@
-const { createSuccessResponse } = require('../../response');
+const { Fragment } = require('../../model/fragment');
+const logger = require('../../logger');
+const { createSuccessResponse, createErrorResponse } = require('../../response');
 
 /**
  * Get a list of fragments for the current user
  */
-module.exports = (req, res) => {
-  // TODO: this is just a placeholder to get something working...
-  res.status(200).json(createSuccessResponse({ fragments: [] }));
+module.exports = async (req, res) => {
+  try {
+    const userId = 'test';
+    const expand = req.query.expand == 1;
+    const fragments = await Fragment.byUser(userId, expand);
+    res.status(200).json(createSuccessResponse({ fragments: fragments }));
+  } catch (error) {
+    logger.warn(error);
+    res.status(500).json(createErrorResponse(500, 'internal error'));
+  }
 };
