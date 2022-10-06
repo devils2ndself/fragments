@@ -7,7 +7,7 @@ const { createErrorResponse } = require('../../response');
  */
 module.exports = async (req, res) => {
   try {
-    const userId = 'test';
+    const userId = req.user;
     const fragment = await Fragment.byId(userId, req.params.id);
     const data = await fragment.getData();
     res.status(200).set({ 'Content-Type': fragment.type }).send(data);

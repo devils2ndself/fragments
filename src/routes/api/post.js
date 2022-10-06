@@ -6,7 +6,7 @@ const { createSuccessResponse, createErrorResponse } = require('../../response')
 module.exports = (req, res) => {
   try {
     if (Buffer.isBuffer(req.body) === true) {
-      const userId = 'test';
+      const userId = req.user;
       const newFragment = new Fragment({ ownerId: userId, type: contentType.parse(req).type });
       newFragment.setData(req.body);
       const location = process.env.API_URL + '/v1/fragments/' + newFragment.id;
