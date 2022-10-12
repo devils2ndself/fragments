@@ -1,6 +1,7 @@
 const request = require('supertest');
 
 const app = require('../../src/app');
+const hash = require('../../src/hash');
 
 describe('GET /v1/fragments', () => {
   // If the request is missing the Authorization header, it should be forbidden
@@ -18,5 +19,20 @@ describe('GET /v1/fragments', () => {
     expect(Array.isArray(res.body.fragments)).toBe(true);
   });
 
-  // TODO: we'll need to add tests to check the contents of the fragments array later
+  test('expand gives all fragments metadata', async () => {
+    await request(app)
+      .post('/v1/fragments')
+      .auth('user1@email.com', 'password1')
+      .set({ 'Content-Type': 'text/plain' })
+      .send(Buffer.from('Test'));
+    const res = await request(app)
+      .get('/v1/fragments?expand=1')
+      .auth('user1@email.com', 'password1');
+    expect(res.statusCode).toBe(200);
+    expect(res.body.status).toBe('ok');
+    expect(Array.isArray(res.body.fragments)).toBe(true);
+    expect(res.body.fragments[0].type).toBe('text/plain');
+    expect(res.body.fragments[0].size).toBeGreaterThan(0);
+    expect(res.body.fragments[0].ownerId).toBe(hash('user1@email.com'));
+  });
 });
