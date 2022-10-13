@@ -1,0 +1,13 @@
+.git/
+.github/
+.vscode/
+coverage/
+node_modules/
+tests/
+!tests/.htpasswd
+.env
+.eslintrc.js
+.gitignore
+.prettier*
+jest*
+fragments-0.0.1.tgz
