@@ -27,9 +27,14 @@ describe('GET /v1/fragments/:id/info', () => {
       .auth('user1@email.com', 'password1')
       .expect(200);
     expect(res.body.status).toBe('ok');
+    expect(res.body.fragment.id).toMatch(
+      /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/
+    );
     expect(res.body.fragment.ownerId).toBe(hash('user1@email.com'));
     expect(res.body.fragment.size).toBeGreaterThan(0);
     expect(res.body.fragment.type).toBe('text/plain');
+    expect(Date.parse(res.body.fragment.created)).not.toBeNaN();
+    expect(Date.parse(res.body.fragment.updated)).not.toBeNaN();
   });
 
   test('non-existent fragments return 404', async () => {

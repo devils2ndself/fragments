@@ -15,7 +15,14 @@ const {
 } = require('./data');
 
 class Fragment {
-  constructor({ id, ownerId, type, size = 0 }) {
+  constructor({
+    id,
+    ownerId,
+    type,
+    size = 0,
+    created = new Date().toISOString(),
+    updated = new Date().toISOString(),
+  }) {
     if (!ownerId || !type) {
       throw new Error('Fragment must have ownerId and type!');
     }
@@ -33,9 +40,8 @@ class Fragment {
     } else {
       this.id = id;
     }
-    const isoDate = new Date().toISOString();
-    this.created = isoDate;
-    this.updated = isoDate;
+    this.created = created;
+    this.updated = updated;
   }
 
   /**
@@ -98,11 +104,10 @@ class Fragment {
   async setData(data) {
     if (!data || !Buffer.isBuffer(data)) {
       throw new Error('Data is not Buffer!');
-    } else {
-      this.size = data.length;
-      await this.save();
-      return writeFragmentData(this.ownerId, this.id, data);
     }
+    this.size = data.length;
+    await this.save();
+    return writeFragmentData(this.ownerId, this.id, data);
   }
 
   /**

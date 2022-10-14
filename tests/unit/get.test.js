@@ -19,6 +19,19 @@ describe('GET /v1/fragments', () => {
     expect(Array.isArray(res.body.fragments)).toBe(true);
   });
 
+  test('posted id is in the array', async () => {
+    const postRes = await request(app)
+      .post('/v1/fragments')
+      .auth('user1@email.com', 'password1')
+      .set({ 'Content-Type': 'text/plain' })
+      .send(Buffer.from('Test'));
+    const res = await request(app).get('/v1/fragments').auth('user1@email.com', 'password1');
+    expect(res.statusCode).toBe(200);
+    expect(res.body.status).toBe('ok');
+    expect(Array.isArray(res.body.fragments)).toBe(true);
+    expect(res.body.fragments[0]).toBe(postRes.body.fragment.id);
+  });
+
   test('expand gives all fragments metadata', async () => {
     await request(app)
       .post('/v1/fragments')
@@ -31,8 +44,13 @@ describe('GET /v1/fragments', () => {
     expect(res.statusCode).toBe(200);
     expect(res.body.status).toBe('ok');
     expect(Array.isArray(res.body.fragments)).toBe(true);
+    expect(res.body.fragments[0].id).toMatch(
+      /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/
+    );
+    expect(res.body.fragments[0].ownerId).toBe(hash('user1@email.com'));
     expect(res.body.fragments[0].type).toBe('text/plain');
     expect(res.body.fragments[0].size).toBeGreaterThan(0);
-    expect(res.body.fragments[0].ownerId).toBe(hash('user1@email.com'));
+    expect(Date.parse(res.body.fragments[0].created)).not.toBeNaN();
+    expect(Date.parse(res.body.fragments[0].updated)).not.toBeNaN();
   });
 });
