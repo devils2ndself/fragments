@@ -32,8 +32,8 @@ REST API microservice for managing small pieces of data
 - `docker build -t fragments .`
   Build docker image
 
-- `docker run --rm --env-file [environment file] -p 8080:8080 [-e LOG_LEVEL=debug] -d fragments`
-  Run docker image in background
+- `docker run --rm --init [--env-file <environment file>] -p 8080:8080 [-e LOG_LEVEL=debug] [-d | -it] fragments`
+  Run docker image in background (-d for running in background, -it for interactive shell)
 
 ## Notes (for myself)
 
