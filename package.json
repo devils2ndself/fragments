@@ -1,7 +1,7 @@
 {
   "name": "fragments",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.7.0",
   "description": "REST API microservice for managing small pieces of data",
   "main": "index.js",
   "scripts": {
