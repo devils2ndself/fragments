@@ -28,6 +28,57 @@ describe('GET /v1/fragments/:id', () => {
       .expect(200);
   });
 
+  test('authenticated users can get type-parsed fragments', async () => {
+    const postRes = await request(app)
+      .post('/v1/fragments')
+      .auth('user1@email.com', 'password1')
+      .set({ 'Content-Type': 'text/markdown' })
+      .send(Buffer.from('# Test'));
+    await request(app)
+      .get('/v1/fragments/' + postRes.body.fragment.id + '.html')
+      .auth('user1@email.com', 'password1')
+      .expect('Content-Type', /text\/html/)
+      .expect(200);
+  });
+
+  test('type is not changed if fetched as it is', async () => {
+    const postRes = await request(app)
+      .post('/v1/fragments')
+      .auth('user1@email.com', 'password1')
+      .set({ 'Content-Type': 'text/markdown' })
+      .send(Buffer.from('# Test'));
+    await request(app)
+      .get('/v1/fragments/' + postRes.body.fragment.id + '.md')
+      .auth('user1@email.com', 'password1')
+      .expect('Content-Type', /text\/markdown/)
+      .expect(200);
+  });
+
+  test('text types can be parsed into txt', async () => {
+    const postRes = await request(app)
+      .post('/v1/fragments')
+      .auth('user1@email.com', 'password1')
+      .set({ 'Content-Type': 'text/markdown' })
+      .send(Buffer.from('# Test'));
+    await request(app)
+      .get('/v1/fragments/' + postRes.body.fragment.id + '.txt')
+      .auth('user1@email.com', 'password1')
+      .expect('Content-Type', /text\/plain/)
+      .expect(200);
+  });
+
+  test('unsupported formats return 415', async () => {
+    const postRes = await request(app)
+      .post('/v1/fragments')
+      .auth('user1@email.com', 'password1')
+      .set({ 'Content-Type': 'text/markdown' })
+      .send(Buffer.from('# Test'));
+    await request(app)
+      .get('/v1/fragments/' + postRes.body.fragment.id + '.test')
+      .auth('user1@email.com', 'password1')
+      .expect(415);
+  });
+
   test('non-existent fragments return 404', async () => {
     const res = await request(app).get('/v1/fragments/123').auth('user1@email.com', 'password1');
     expect(res.statusCode).toBe(404);
