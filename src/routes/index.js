@@ -1,4 +1,5 @@
 const express = require('express');
+const { hostname } = require('os');
 
 // version and author from package.json
 const { version, author } = require('../../package.json');
@@ -28,6 +29,7 @@ router.get('/', (req, res) => {
       author,
       githubUrl: 'https://github.com/devils2ndself/fragments',
       version,
+      hostname: hostname()
     })
   );
 });
