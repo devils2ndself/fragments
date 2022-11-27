@@ -49,5 +49,8 @@ ENV PORT=8080 \
 # Start the container by running our server
 CMD ["node", "src/index.js"]
 
+HEALTHCHECK --interval=3m --timeout=3s \
+  CMD curl -f http://localhost:8080 || exit 1
+
 # Open port 8080
 EXPOSE 8080
