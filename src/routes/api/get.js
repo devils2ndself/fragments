@@ -8,7 +8,7 @@ const { createSuccessResponse, createErrorResponse } = require('../../response')
 module.exports = async (req, res) => {
   try {
     const userId = req.user;
-    const expand = req.query.expand === 1;
+    const expand = req.query.expand == 1;
     const fragments = await Fragment.byUser(userId, expand);
     res.status(200).json(createSuccessResponse({ fragments: fragments }));
   } catch (error) {
