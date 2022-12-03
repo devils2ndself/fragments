@@ -7,16 +7,19 @@ REST API microservice for managing small pieces of data
 ### Server
 
 - `npm start`  
-  Starts the server in production mode
+  Starts the server in production mode. Append ':mock' if you would like to use Basic Auth.
 
 - `npm run dev`  
-  Starts the server in development mode for better logging and automatic restart when files in `src` folder are changed
+  Starts the server in development mode for better logging and automatic restart when files in `src` folder are changed. Append ':mock' if you would like to use Basic Auth.
 
 - `npm run debug`  
-  Starts the server in dev mode and allows for debugger to be added - Start via VSCode `Debug`
+  Starts the server in dev mode and allows for debugger to be added - Start via VSCode `Debug`. Append ':mock' if you would like to use Basic Auth.
+
+- `npm run test:integration`
+  Run HURL integration tests. Requires app to be running
 
 - `npm run test`
-  Run jest unit tests
+  Run jest unit tests  
 
 - `npm run test:watch`
   Rerun tests after every file save
@@ -29,11 +32,16 @@ REST API microservice for managing small pieces of data
 
 ### Docker
 
-- `docker build -t fragments .`
-  Build docker image
+You can use docker-compose with a script for DynamoDB and S3 setup locally.
+```
+docker-compose up -d
+./scripts/local-aws-setup.sh
+```
 
-- `docker run --rm --init [--env-file <environment file>] -p 8080:8080 [-e LOG_LEVEL=debug] [-d | -it] fragments`
-  Run docker image (-d for running in background, -it for interactive shell)
+If you would like to have MinIO for monitoring local S3, run
+```
+docker-compose -f docker-compose.local.yml up -d
+```
 
 ## Notes (for myself)
 
