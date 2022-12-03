@@ -65,7 +65,7 @@ class Fragment {
     if (!result) {
       throw new Error('No such fragment!');
     } else {
-      return result;
+      return new Fragment(result);
     }
   }
 
