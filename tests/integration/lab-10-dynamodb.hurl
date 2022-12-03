@@ -110,7 +110,7 @@ jsonpath "$.error.message" isString
 
 
 
-# 5. Try to GET all fragments
+# 8. Try to GET all fragments
 GET http://localhost:8080/v1/fragments
 [BasicAuth]
 user1@email.com:password1

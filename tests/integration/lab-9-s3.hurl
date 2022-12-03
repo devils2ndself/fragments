@@ -36,7 +36,7 @@ user1@email.com:password1
 
 HTTP/1.1 200
 
-# 2. Try to GET the fragment we just deleted by its URL
+# 4. Try to GET the fragment we just deleted by its URL
 GET {{url}}
 [BasicAuth]
 user1@email.com:password1
