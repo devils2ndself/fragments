@@ -98,6 +98,9 @@ jobs:
         run: ./scripts/local-aws-setup.sh
       - name: Run Hurl Tests
         run: npm run test:integration
+      - name: Dump docker logs on failure
+        if: failure()
+        uses: jwalton/gh-docker-logs@v2
 
   docker-hub:
     name: Build and Push to Docker Hub
