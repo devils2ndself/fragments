@@ -12,6 +12,7 @@ const {
   writeFragmentData,
   listFragments,
   deleteFragment,
+  deleteFragmentData
 } = require('./data');
 
 class Fragment {
@@ -102,6 +103,9 @@ class Fragment {
    * @returns Promise
    */
   async setData(data) {
+    try {
+      await deleteFragmentData(this.ownerId, this.id);
+    } catch { this.size = 0; }
     if (!data || !Buffer.isBuffer(data)) {
       throw new Error('Data is not Buffer!');
     }
