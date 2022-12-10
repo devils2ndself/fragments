@@ -13,7 +13,7 @@ module.exports = async (req, res) => {
     const newFragment = new Fragment({ ownerId: userId, type: contentType.parse(req).type });
     await newFragment.save();
     await newFragment.setData(req.body);
-    const location = req.headers.host + '/v1/fragments/' + newFragment.id;
+    const location = 'http://' + req.headers.host + '/v1/fragments/' + newFragment.id;
     res
       .status(201)
       .set({ Location: location })

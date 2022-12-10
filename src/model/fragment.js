@@ -166,12 +166,10 @@ class Fragment {
       `text/markdown`,
       `text/html`,
       `application/json`,
-      /*
       `image/png`,
       `image/jpeg`,
       `image/webp`,
       `image/gif`,
-      */
     ];
 
     const { type } = contentType.parse(value);
