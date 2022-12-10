@@ -2,6 +2,7 @@ const { Fragment } = require('../../model/fragment');
 const logger = require('../../logger');
 const { createErrorResponse } = require('../../response');
 const md = require('markdown-it')();
+const sharp = require('sharp');
 
 const extensionMap = {
   txt: 'text/plain',
@@ -15,7 +16,7 @@ const extensionMap = {
   gif: 'image/gif',
 };
 
-function parseContent(data, fragment, newTypeExt) {
+async function parseContent(data, fragment, newTypeExt) {
   let type = fragment.mimeType;
   if (newTypeExt) {
     let newType = extensionMap[newTypeExt];
@@ -31,6 +32,34 @@ function parseContent(data, fragment, newTypeExt) {
     } else if (type == 'text/markdown' && newType == 'text/html') {
       type = newType;
       data = Buffer.from(md.render(data.toString()));
+    }  else if (type.startsWith('image/') && newType.startsWith('image/')) {
+      type = newType;
+      switch (newType) {
+        case 'image/jpeg':
+          data = await sharp(data)
+            .jpeg({
+              quality: 100,
+              chromaSubsampling: '4:4:4'
+            }).toBuffer();
+          break;
+        case 'image/png':
+          data = await sharp(data)
+            .png()
+            .toBuffer();
+          break;
+        case 'image/webp':
+          data = await sharp(data)
+            .webp({ lossless: true })
+            .toBuffer();
+          break;
+        case 'image/gif':
+          data = await sharp(data)
+            .gif()
+            .toBuffer();
+          break;
+        default:
+          throw Error('Unsupported type!');
+      }
     } else {
       throw Error('Unsupported type!');
     }
@@ -47,7 +76,7 @@ module.exports = async (req, res) => {
   try {
     const userId = req.user;
     const fragment = await Fragment.byId(userId, req.params.id);
-    const parsed = parseContent(await fragment.getData(), fragment, req.params.ext);
+    const parsed = await parseContent(await fragment.getData(), fragment, req.params.ext);
     res.status(200).set({ 'Content-Type': parsed.type }).send(parsed.data);
   } catch (error) {
     if (error.message == 'No such fragment!') {

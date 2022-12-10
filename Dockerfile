@@ -12,6 +12,7 @@ COPY package*.json ./
 
 # Install node dependencies defined in package-lock.json
 RUN npm ci
+RUN npm rebuild --platform=linux --arch=x64 --libc=musl sharp
 
 #######################
 
