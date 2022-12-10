@@ -1,6 +1,7 @@
 const request = require('supertest');
-
+const fs = require('fs');
 const app = require('../../src/app');
+var path = require('path');
 
 describe('GET /v1/fragments/:id', () => {
   // If the request is missing the Authorization header, it should be forbidden
@@ -64,6 +65,30 @@ describe('GET /v1/fragments/:id', () => {
       .get('/v1/fragments/' + postRes.body.fragment.id + '.txt')
       .auth('user1@email.com', 'password1')
       .expect('Content-Type', /text\/plain/)
+      .expect(200);
+  });
+
+  test('image types can be parsed into other image types', async () => {
+    const buffer = fs.readFileSync(path.join(__dirname, '../image.jpg'));
+    const postRes = await request(app)
+      .post('/v1/fragments')
+      .auth('user1@email.com', 'password1')
+      .set({ 'Content-Type': 'image/jpeg' })
+      .send(buffer);
+    await request(app)
+      .get('/v1/fragments/' + postRes.body.fragment.id + '.png')
+      .auth('user1@email.com', 'password1')
+      .expect('Content-Type', /image\/png/)
+      .expect(200);
+    await request(app)
+      .get('/v1/fragments/' + postRes.body.fragment.id + '.gif')
+      .auth('user1@email.com', 'password1')
+      .expect('Content-Type', /image\/gif/)
+      .expect(200);
+    await request(app)
+      .get('/v1/fragments/' + postRes.body.fragment.id + '.webp')
+      .auth('user1@email.com', 'password1')
+      .expect('Content-Type', /image\/webp/)
       .expect(200);
   });
 
